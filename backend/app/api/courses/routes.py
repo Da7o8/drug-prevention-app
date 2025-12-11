@@ -9,10 +9,20 @@ from app.models.course_module import CourseModule
 
 @course_bp.route('/', methods=['GET'])
 def get_courses():
-    """Lấy danh sách khóa học (Có thể lọc theo đối tượng)."""
-    target = request.args.get('audience')
-    courses = CourseService.get_all_courses(target)
-    return jsonify(courses), 200
+    """Lấy danh sách khóa học (Có thể lọc theo đối tượng và tìm kiếm)."""
+
+    target = request.args.get('target_audience') 
+    search_term = request.args.get('search')
+
+    try:
+        courses = CourseService.get_all_courses(
+            target_audience=target,
+            search_term=search_term
+        )
+        return jsonify(courses), 200
+    except Exception as e:
+        print(f"LỖI TẢI KHÓA HỌC: {e}")
+        return jsonify({"msg": "Lỗi hệ thống khi tải khóa học"}), 500
 
 @course_bp.route('/', methods=['POST'])
 @jwt_required()
@@ -33,7 +43,6 @@ def create_course():
         )
         return jsonify({"msg": "Khóa học đã được tạo", "course": course}), 201
     except Exception as e:
-        # Lỗi DB, lỗi nghiệp vụ...
         return jsonify({"msg": "Lỗi tạo khóa học", "error": str(e)}), 500
     
 @course_bp.route('/register', methods=['POST'])

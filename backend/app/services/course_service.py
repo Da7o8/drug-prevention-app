@@ -4,14 +4,26 @@ from app.models.course import Course
 from app.models.course_progress import UserCourseProgress
 from app.models.user import User
 from app.models.course_module import CourseModule
+from sqlalchemy import or_
 
 class CourseService:
     @staticmethod
-    def get_all_courses(target_audience=None):
-        """Lấy danh sách tất cả khóa học, tùy chọn lọc theo đối tượng."""
+    def get_all_courses(target_audience=None, search_term=None):
+        """Lấy danh sách tất cả khóa học, tùy chọn lọc theo đối tượng và tìm kiếm."""
+        
         query = Course.query.filter_by(is_active=True)
+        
         if target_audience:
-            query = query.filter_by(target_audience=target_audience)
+            query = query.filter(Course.target_audience.ilike(target_audience))    
+
+        if search_term:
+            search_pattern = f"%{search_term}%"
+            query = query.filter(
+                or_(
+                    Course.title.ilike(search_pattern),
+                    Course.description.ilike(search_pattern)
+                )
+            )
         
         return [course.to_dict() for course in query.all()]
     

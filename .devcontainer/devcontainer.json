@@ -1,0 +1,15 @@
+{
+    "name": "Drug Prevention App (API/Backend)",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "api",   
+    "workspaceFolder": "/usr/src/app",  
+    "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+    ],
+    "postCreateCommand": "pip install -r requirements.txt", 
+
+    "forwardPorts": [5001]
+}

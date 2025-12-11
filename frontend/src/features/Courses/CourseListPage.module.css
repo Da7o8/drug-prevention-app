@@ -30,6 +30,33 @@
     background-color: #e0a800;
 }
 
+/* Thanh tìm kiếm và bộ lọc */
+.filterBar {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    align-items: center;
+}
+
+.searchInput {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.filterSelect {
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 1em;
+    min-width: 200px;
+}
+
 .courseGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

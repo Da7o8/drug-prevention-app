@@ -12,10 +12,18 @@ const COURSE_ENDPOINTS = {
 };
 
 // Hàm lấy tất cả các khóa học
-export const getAllCourses = async (): Promise<Course[]> => {
+export const getAllCourses = async (search: string = '', targetAudience: string = ''): Promise<Course[]> => {
     try {
-        const response = await api.get(COURSE_ENDPOINTS.GET_ALL_COURSES);
-
+        const params: Record<string, string> = {};
+        if (search) {
+            params.search = search; 
+        }
+        if (targetAudience) {
+            params.target_audience = targetAudience; 
+        }
+        const response = await api.get(COURSE_ENDPOINTS.GET_ALL_COURSES, {
+            params: params, 
+        });
         return response.data; 
     } catch (error) {
         console.error("Lỗi khi tải danh sách khóa học:", error);

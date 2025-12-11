@@ -1,4 +1,3 @@
-// frontend/src/features/Courses/CourseListPage.tsx
 import React, { useState, useEffect } from 'react';
 import { getAllCourses, registerCourse, getMyProgress } from '../../services/courseService';
 import type { Course, CourseProgress } from '../../types/course';
@@ -9,17 +8,25 @@ import toast from 'react-hot-toast';
 // Import CSS Module
 import styles from './CourseListPage.module.css';
 
+const AUDIENCE_OPTIONS = [
+    { label: 'Tất cả', value: '' },
+    { label: 'Học sinh/Sinh viên', value: 'student' },
+    { label: 'Phụ huynh', value: 'parent' },
+];
+
 const CourseListPage: React.FC = () => {
     const { user } = useAuth();
     const [courses, setCourses] = useState<Course[]>([]);
     const [userProgress, setUserProgress] = useState<CourseProgress[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [searchTerm, setSearchTerm] = useState(''); 
+    const [filterAudience, setFilterAudience] = useState(''); 
 
     useEffect(() => {
         const loadCoursesAndProgress = async () => { 
             try {
-                const courseData = await getAllCourses();
+                const courseData = await getAllCourses(searchTerm, filterAudience);
                 setCourses(courseData);
 
                 if (user) {
@@ -35,26 +42,25 @@ const CourseListPage: React.FC = () => {
             }
         };
         loadCoursesAndProgress();
-    }, [user]);
+    }, [user, searchTerm, filterAudience]);
 
-const isRegistered = (courseId: number): boolean => {
-        return userProgress.some(p => p.course_id === courseId);
+    const isRegistered = (courseId: number): boolean => {
+            return userProgress.some(p => p.course_id === courseId);
+        };
+
+    const handleRegister = async (courseId: number, courseTitle: string) => {
+        if (!window.confirm(`Bạn có chắc chắn muốn đăng ký khóa học: ${courseTitle}?`)) {
+            return;
+        }
+        try {
+            await registerCourse(courseId);
+            toast.success(`Đăng ký khóa học "${courseTitle}" thành công!`);          
+            // loadCourses(); 
+        } catch (err: any) {
+            const errMsg = err.response?.data?.message || 'Lỗi đăng ký không xác định.';
+            toast.error(`Đăng ký thất bại: ${errMsg}`);
+        }
     };
-
-const handleRegister = async (courseId: number, courseTitle: string) => {
-    if (!window.confirm(`Bạn có chắc chắn muốn đăng ký khóa học: ${courseTitle}?`)) {
-        return;
-    }
-
-    try {
-        await registerCourse(courseId);
-        toast.success(`Đăng ký khóa học "${courseTitle}" thành công!`);          
-        // loadCourses(); 
-    } catch (err: any) {
-        const errMsg = err.response?.data?.message || 'Lỗi đăng ký không xác định.';
-        toast.error(`Đăng ký thất bại: ${errMsg}`);
-    }
-};
 
     if (isLoading) {
         return <div className={styles.loading}>Đang tải danh sách khóa học...</div>;
@@ -75,6 +81,30 @@ const handleRegister = async (courseId: number, courseTitle: string) => {
                         + Tạo Khóa học Mới
                     </Link>
                 )}
+            </div>
+
+            <div className={styles.filterBar}>
+                {/* Thanh Tìm kiếm */}
+                <input
+                    type="text"
+                    placeholder="Tìm kiếm theo tên khóa học hoặc mô tả..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className={styles.searchInput}
+                />
+
+                {/* Bộ lọc Đối tượng */}
+                <select
+                    value={filterAudience}
+                    onChange={(e) => setFilterAudience(e.target.value)}
+                    className={styles.filterSelect}
+                >
+                    {AUDIENCE_OPTIONS.map(option => (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             <div className={styles.courseGrid}>
