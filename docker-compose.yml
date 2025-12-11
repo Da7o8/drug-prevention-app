@@ -1,0 +1,76 @@
+services:
+  # 1. PostgreSQL Database Service
+  db:
+    image: postgres:15-alpine
+    container_name: prevention_db
+    restart: always
+    environment:
+      # Thiết lập các biến môi trường cho PostgreSQL
+      POSTGRES_USER: prevention_user
+      POSTGRES_PASSWORD: strong_password
+      POSTGRES_DB: prevention_db
+    ports:
+      - "5432:5432"
+    volumes:
+      # Dùng volume để đảm bảo dữ liệu không bị mất khi container bị xóa
+      - postgres_data:/var/lib/postgresql/data/
+
+  # 2. RabbitMQ Message Broker Service
+  rabbitmq:
+    image: rabbitmq:3-management-alpine # Sử dụng image có giao diện quản lý
+    container_name: prevention_rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      # Port 5672 cho giao tiếp với Celery, 15672 cho giao diện quản lý
+      - "5672:5672"
+      - "15672:15672"
+
+  # 3. Flask API Service (Backend)
+  # Chúng ta sẽ định nghĩa Dockerfile cho service này ở bước sau
+  api:
+    build: ./backend
+    container_name: prevention_api
+    command: sh -c "sleep 5 && python run.py" # Tạm thời, chờ DB khởi động rồi chạy Flask
+    ports:
+      - "5001:5000" # Mở port 5001 cho Flask
+    depends_on:
+      - db
+      - rabbitmq
+      - redis
+    environment:
+      # Cấu hình kết nối cho Flask Backend
+      DATABASE_URL: postgresql://prevention_user:strong_password@db:5432/prevention_db
+      RABBITMQ_BROKER_URL: amqp://guest:guest@rabbitmq:5672//
+      FLASK_ENV: development
+
+  # 4. Redis Service (Celery Result Backend)
+  redis:
+    image: redis:6-alpine
+    container_name: prevention_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  frontend:
+    container_name: prevention_frontend
+    build:
+      context: ./frontend  # Chỉ định thư mục build là frontend/
+      dockerfile: Dockerfile.dev 
+    ports:
+      - "3000:3000" # Mapp cổng 3000 trên host đến cổng 3000 trong container
+    volumes:
+      - ./frontend:/usr/src/app/frontend # Mount code từ host vào container
+      - /usr/src/app/frontend/node_modules # Loại trừ node_modules khỏi việc mount
+    environment:
+      # Định nghĩa biến môi trường cho Frontend biết API đang chạy ở đâu
+      VITE_API_BASE_URL: http://api:5000
+    depends_on:
+      - api # Đảm bảo API khởi động trước
+    # Lệnh khởi động React/Vite
+    command: npm run dev -- --host 0.0.0.0 --port 3000
+# Định nghĩa Volume
+volumes:
+  postgres_data:

@@ -1,0 +1,29 @@
+.inputGroup {
+    margin-bottom: 15px;
+}
+
+.label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; 
+    font-size: 1em;
+}
+
+.inputError {
+    border-color: #dc3545; 
+}
+
+.errorMessage {
+    color: #dc3545;
+    font-size: 0.85em;
+    margin-top: 5px;
+}

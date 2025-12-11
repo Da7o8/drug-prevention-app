@@ -1,0 +1,141 @@
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 24px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.courseTitle {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #1e293b;
+}
+
+.courseDesc {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #475569;
+    margin-bottom: 24px;
+}
+
+.progressStatus {
+    margin-bottom: 28px;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #f8fafc;
+}
+
+.completed {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.inProgress {
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.notRegistered {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.moduleContent {
+    background-color: #f1f5f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 32px;
+}
+
+.moduleContent h2 {
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: #0f172a;
+}
+
+.moduleContent p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #334155;
+}
+
+.completeButton {
+    margin-top: 16px;
+    background-color: #22c55e;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.completeButton:hover {
+    background-color: #16a34a;
+    transform: translateY(-1px);
+}
+
+.completeButton:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+}
+
+.structureHeader {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #1e293b;
+}
+
+.moduleList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.moduleList li {
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    background-color: #f8fafc;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #334155;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.currentModule {
+    background-color: #dbeafe;
+    font-weight: 600;
+    color: #1d4ed8;
+}
+
+.badgeComplete {
+    background-color: #22c55e;
+    color: white;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    margin-left: 12px;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    font-size: 16px;
+    color: #475569;
+}
+
+.error {
+    text-align: center;
+    padding: 40px;
+    font-size: 16px;
+    color: #dc2626;
+    font-weight: 600;
+}

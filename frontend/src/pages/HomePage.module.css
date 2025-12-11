@@ -1,0 +1,57 @@
+.container {
+    padding: 40px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #f8f9fa; 
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.header {
+    font-size: 2em;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.roleText {
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.buttonGroup {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px; 
+    align-items: center;
+}
+
+.viewCourseButton {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    text-align: center;
+}
+
+.viewCourseButton:hover {
+    background-color: #0056b3;
+}
+
+.logoutButton {
+    padding: 10px 20px;
+    background-color: #dc3545; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+}
+
+.logoutButton:hover {
+    background-color: #c82333;
+}

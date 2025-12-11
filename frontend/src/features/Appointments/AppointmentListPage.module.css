@@ -1,0 +1,103 @@
+.container {
+    padding: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.header {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+/* Nút đặt lịch */
+.bookingAction {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.bookButton {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #17a2b8; 
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.bookButton:hover {
+    background-color: #138496;
+}
+.subHeader {
+    text-align: center;
+    color: #6c757d;
+    margin-bottom: 30px;
+}
+.appointmentList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.appointmentCard {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.info p {
+    margin: 5px 0;
+    font-size: 0.95em;
+}
+
+/* Trạng thái */
+.pending {
+    border-left: 5px solid #ffc107; 
+    background-color: #fff9e6;
+}
+.confirmed {
+    border-left: 5px solid #28a745; 
+    background-color: #e6ffed;
+}
+.canceled {
+    border-left: 5px solid #dc3545; 
+    background-color: #ffe6e6;
+}
+
+.statusGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.statusBadge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    font-weight: bold;
+    background-color: #6c757d;
+    color: white;
+    margin-bottom: 10px;
+}
+.actionButtons button {
+    margin-left: 10px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.confirmButton {
+    background-color: #28a745;
+    color: white;
+}
+.cancelButton {
+    background-color: #dc3545;
+    color: white;
+}
+.noData {
+    text-align: center;
+    color: #999;
+    margin-top: 50px;
+}

@@ -1,0 +1,16 @@
+FROM node:20-alpine
+
+# Thiết lập thư mục làm việc trong container
+WORKDIR /usr/src/app/frontend
+
+# Copy package.json và package-lock.json để cài đặt dependencies
+COPY package*.json ./
+
+# Cài đặt Node dependencies
+RUN npm install
+
+# Copy phần còn lại 
+COPY . .
+
+# Command mặc định khi container chạy 
+CMD ["npm", "run", "dev"]
