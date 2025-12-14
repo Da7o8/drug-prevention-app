@@ -1,6 +1,5 @@
-// frontend/src/services/appointmentService.ts
 import api from './api';
-import type { Appointment, CounselorProfile, AppointmentStatus } from '../types/appointment';
+import type { CounselorProfile, AppointmentStatus } from '../types/appointment';
 
 const APPOINTMENT_ENDPOINTS = {
     // Lấy danh sách chuyên viên
@@ -23,38 +22,29 @@ export const getAllCounselors = async (): Promise<CounselorProfile[]> => {
 };
 
 // Đặt lịch hẹn mới
-export const createAppointment = async (data: { counselor_id: number, start_time: string, reason: string }): Promise<Appointment> => {
-    try {
-        const response = await api.post(APPOINTMENT_ENDPOINTS.GET_MY_APPOINTMENTS, data);
-        return response.data.appointment;
-    } catch (error) {
-        console.error("Lỗi khi đặt lịch hẹn:", error);
-        throw error;
-    }
+export const createAppointment = async (data: {
+  counselor_user_id: number;
+  start_time: string;
+  reason: string;
+}) => {
+  const response = await api.post(APPOINTMENT_ENDPOINTS.GET_MY_APPOINTMENTS, data);
+  return response.data.data;
 };
 
 // Lấy danh sách lịch hẹn
-export const getMyAppointments = async (): Promise<Appointment[]> => {
-    try {
-        // Hiển thị dựa trên JWT
-        const response = await api.get(APPOINTMENT_ENDPOINTS.GET_MY_APPOINTMENTS);
-        return response.data; 
-    } catch (error) {
-        console.error("Lỗi khi tải lịch hẹn của tôi:", error);
-        throw error;
-    }
+export const getMyAppointments = async () => {
+  const response = await api.get(APPOINTMENT_ENDPOINTS.GET_MY_APPOINTMENTS);
+  return response.data.data;
 };
 
-// Cập nhật trạng thái lịch hẹn 
-export const updateAppointmentStatus = async (appointmentId: number, status: AppointmentStatus): Promise<Appointment> => {
-    try {
-        const response = await api.post(
-            APPOINTMENT_ENDPOINTS.UPDATE_APPOINTMENT_STATUS(appointmentId), 
-            { status }
-        );
-        return response.data;
-    } catch (error) {
-        console.error(`Lỗi khi cập nhật trạng thái lịch hẹn ${appointmentId}:`, error);
-        throw error;
-    }
+// Cập nhật trạng thái
+export const updateAppointmentStatus = async (
+  appointmentId: number,
+  status: AppointmentStatus
+) => {
+  const response = await api.post(
+    APPOINTMENT_ENDPOINTS.UPDATE_APPOINTMENT_STATUS(appointmentId),
+    { status }
+  );
+  return response.data.data;
 };
