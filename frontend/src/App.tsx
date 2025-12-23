@@ -31,23 +31,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 };
 
 function App() {
-  const { isLoading } = useAuth();
-
-  if (isLoading) {
-    return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontSize: '1.4rem',
-        color: '#4b5563',
-        background: '#f0f9ff'
-      }}>
-        Đang tải ứng dụng...
-      </div>
-    );
-  }
 
   return (
     <BrowserRouter>

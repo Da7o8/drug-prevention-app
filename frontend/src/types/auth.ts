@@ -1,9 +1,8 @@
-// src/types/auth.ts
 export interface AuthData {
   token: string;
   user_id: number;
   email: string;
-  role: 'admin' | 'counselor' | 'user';
+  role: 'admin' | 'counselor' | 'user'; // Đã xác định ở Backend
 }
 
 export interface UserProfile {
@@ -17,7 +16,6 @@ export interface AuthContextType {
   user: UserProfile | null;
   token: string | null;
   isAuthenticated: boolean;
-  isLoading: boolean;
   login: (data: AuthData) => void;
   logout: () => void;
   fetchProfile: () => Promise<void>;

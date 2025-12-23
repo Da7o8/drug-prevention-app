@@ -1,129 +1,122 @@
-// src/context/AuthContext.tsx
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import type { AuthData, UserProfile, AuthContextType } from '../types/auth';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import type { AuthData, UserProfile } from '../types/auth';
+import type { AuthContextType } from '../types/auth';
 import api from '../services/api';
 
+// Tạo Context với giá trị mặc định là null hoặc các hàm rỗng
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Định nghĩa Props cho Provider
 interface AuthProviderProps {
   children: React.ReactNode;
 }
+
+// Hàm chuyển đổi AuthData thành UserProfile cơ bản
+const mapAuthDataToProfile = (data: AuthData): UserProfile => ({
+  id: data.user_id,
+  email: data.email,
+  name: data.email.split('@')[0],
+  role: data.role,
+});
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Đăng nhập – lưu đầy đủ vào localStorage
+  // Hàm Đăng nhập: Lưu token vào state và localStorage
   const login = (data: AuthData) => {
-    const profile: UserProfile = {
-      id: data.user_id,
-      email: data.email,
-      name: data.email.split('@')[0],
-      role: data.role,
-    };
+    localStorage.setItem('accessToken', data.token);
+    localStorage.setItem('role', data.role);
 
-    setUser(profile);
     setToken(data.token);
-
-    // LƯU ĐẦY ĐỦ VÀO LOCALSTORAGE – QUAN TRỌNG NHẤT
-    localStorage.setItem('authData', JSON.stringify({
-      token: data.token,
-      user: profile,
-    }));
+    setUser(mapAuthDataToProfile(data));
   };
 
-  // Đăng xuất
+  // Hàm Đăng xuất: Xóa token và reset state
   const logout = () => {
-    setUser(null);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('role');
     setToken(null);
-    localStorage.removeItem('authData');
+    setUser(null);
   };
 
-  // Verify token bằng user_id từ backend
-  const verifyToken = async () => {
+  // Hàm tải Profile từ API (khi refresh trang)
+  const fetchProfile = useCallback(async () => {
+    // Kiểm tra xem token đã có chưa. Nếu có, set header mặc định.
+    const storedToken = localStorage.getItem('accessToken');
+    if (!storedToken) {
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await api.get('/auth/profile');
-      const backendUserId = response.data.user_id;
+      const profileData = response.data.profile || {};
 
-      if (!backendUserId) {
-        throw new Error('Backend không trả user_id');
-      }
-
-      // Lấy dữ liệu đã lưu từ localStorage
-      const storedStr = localStorage.getItem('authData');
-      if (!storedStr) {
-        throw new Error('No stored auth data');
-      }
-
-      const stored = JSON.parse(storedStr);
-      if (stored.user.id !== backendUserId) {
-        throw new Error('User ID không khớp');
-      }
-
-      // Token hợp lệ → khôi phục user
-      setUser(stored.user);
-      setToken(stored.token);
-
-    } catch (error) {
-      console.error('Token không hợp lệ hoặc hết hạn:', error);
-      logout();
-    }
-  };
-
-  // Khi app load (F5)
-  useEffect(() => {
-    const initAuth = async () => {
-      const storedStr = localStorage.getItem('authData');
-
-      if (!storedStr) {
-        setIsLoading(false);
+      if (!profileData.id && !profileData.user_id) {
+        logout();
         return;
       }
 
-      try {
-        const stored = JSON.parse(storedStr);
+      setUser({
+        id: profileData.id || profileData.user_id,
+        email: profileData.email,
+        name: profileData.name || profileData.email.split('@')[0],
+        role: profileData.role,
+      });
+      setToken(storedToken);
 
-        if (stored.token && stored.user) {
-          setToken(stored.token);
-          setUser(stored.user);
-
-          // Verify token còn sống
-          await verifyToken();
-        } else {
-          throw new Error('Stored data không đầy đủ');
-        }
-      } catch (error) {
-        console.error('Lỗi khởi tạo auth:', error);
-        logout();
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    initAuth();
+    } catch (error) {
+      console.error("Lỗi tải profile:", error);
+      logout(); // Nếu token hết hạn hoặc lỗi, đăng xuất
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
-  const value: AuthContextType = {
+  // Effect chạy khi component mount lần đầu
+  useEffect(() => {
+    // Thử lấy token đã lưu trong localStorage
+    const storedToken = localStorage.getItem('accessToken');
+    const storedRole = localStorage.getItem('role') as AuthData['role'] | null;
+
+    if (storedToken && storedRole) {
+      // Khi có token gọi lấy thông tin chi tiết qua API (fetchProfile), khi chưa có gọi để xác thực token.
+      fetchProfile();
+    } else {
+      setIsLoading(false);
+    }
+  }, [fetchProfile]);
+
+
+  // Giá trị Context cung cấp ra ngoài
+  const contextValue: AuthContextType = {
     user,
     token,
     isAuthenticated: !!user,
-    isLoading,
     login,
     logout,
-    fetchProfile: verifyToken,
+    fetchProfile,
   };
 
+  // Nếu đang tải, có thể trả về một Spinner (tùy chọn)
+  if (isLoading) {
+    // return <LoadingSpinner />; // Tùy chọn: hiển thị màn hình loading
+  }
+
+
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
 };
 
+// Custom Hook sử dụng Context
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useAuth phải được sử dụng trong AuthProvider');
   }
   return context;
