@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: strong_password
       POSTGRES_DB: prevention_db
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       # Dùng volume để đảm bảo dữ liệu không bị mất khi container bị xóa
       - postgres_data:/var/lib/postgresql/data/
@@ -26,14 +26,21 @@ services:
     ports:
       # Port 5672 cho giao tiếp với Celery, 15672 cho giao diện quản lý
       - "5672:5672"
-      - "15672:15672"
+      - "15673:15672"
 
   # 3. Flask API Service (Backend)
   # Chúng ta sẽ định nghĩa Dockerfile cho service này ở bước sau
   api:
     build: ./backend
     container_name: prevention_api
-    command: sh -c "sleep 5 && python run.py" # Tạm thời, chờ DB khởi động rồi chạy Flask
+    # new change here
+    command: python run.py # đổi từ "sleep 5 && python run.py" thành chỉ python run.py
+    restart: unless-stopped # tự restart nếu crash
+    volumes:
+      # mount code để reload tức thì
+      - ./backend:/app
+
+    # command: sh -c "sleep 5 && python run.py" # Tạm thời, chờ DB khởi động rồi chạy Flask
     ports:
       - "5001:5000" # Mở port 5001 cho Flask
     depends_on:
@@ -57,12 +64,13 @@ services:
   frontend:
     container_name: prevention_frontend
     build:
-      context: ./frontend  # Chỉ định thư mục build là frontend/
-      dockerfile: Dockerfile.dev 
+      context: ./frontend # Chỉ định thư mục build là frontend/
+      dockerfile: Dockerfile.dev
     ports:
       - "3000:3000" # Mapp cổng 3000 trên host đến cổng 3000 trong container
     volumes:
       - ./frontend:/usr/src/app/frontend # Mount code từ host vào container
+      - frontend_node_modules:/usr/src/app/frontend/node_modules # ← đổi thành named volume
       - /usr/src/app/frontend/node_modules # Loại trừ node_modules khỏi việc mount
     environment:
       # Định nghĩa biến môi trường cho Frontend biết API đang chạy ở đâu
@@ -74,3 +82,4 @@ services:
 # Định nghĩa Volume
 volumes:
   postgres_data:
+  frontend_node_modules: # ← thêm dòng này

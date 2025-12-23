@@ -1,57 +1,90 @@
-.container {
-    padding: 40px;
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: #f8f9fa; 
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.header {
-    font-size: 2em;
-    color: #007bff;
-    margin-bottom: 10px;
-}
-
-.roleText {
-    font-size: 1.1em;
-    color: #555;
-    margin-bottom: 25px;
-}
-
-.buttonGroup {
-    margin: 20px 0;
+.pageContainer {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #d1fae5 0%, #c7d2fe 50%, #dbeafe 100%);
+    padding: 60px 20px;
     display: flex;
-    gap: 10px; 
+    flex-direction: column;
     align-items: center;
 }
 
-.viewCourseButton {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    font-weight: bold;
+.heroSection {
     text-align: center;
+    margin-bottom: 60px;
+    max-width: 800px;
 }
 
-.viewCourseButton:hover {
-    background-color: #0056b3;
+.welcomeTitle {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #065f46;
+    margin: 0 0 16px 0;
+}
+
+.welcomeSubtitle {
+    font-size: 1.4rem;
+    color: #4b5563;
+    margin: 0;
+}
+
+.featuresGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+    max-width: 1200px;
+    width: 100%;
+    margin-bottom: 80px;
+}
+
+.featureCard {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.featureCard:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+.featureIcon {
+    font-size: 3.5rem;
+    margin-bottom: 24px;
+    color: #10b981;
+}
+
+.featureCard h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 16px 0;
+}
+
+.featureCard p {
+    font-size: 1.1rem;
+    color: #4b5563;
+    line-height: 1.6;
 }
 
 .logoutButton {
-    padding: 10px 20px;
-    background-color: #dc3545; 
+    padding: 14px 40px;
+    background-color: #ef4444;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s;
-    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3);
 }
 
 .logoutButton:hover {
-    background-color: #c82333;
+    background-color: #dc2626;
+    transform: translateY(-3px);
 }

@@ -1,94 +1,116 @@
 .container {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 24px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background: linear-gradient(to bottom, #f0f9ff, #ffffff);
+    min-height: 100vh;
+}
+
+.heroHeader {
+    text-align: center;
+    padding: 60px 20px 40px;
+    background: linear-gradient(rgba(37, 99, 235, 0.1), transparent);
+    border-radius: 16px;
+    margin-bottom: 40px;
 }
 
 .courseTitle {
-    font-size: 28px;
+    font-size: 2.8rem;
     font-weight: 700;
-    margin-bottom: 12px;
-    color: #1e293b;
+    color: #1e40af;
+    margin: 0 0 16px 0;
 }
 
 .courseDesc {
-    font-size: 16px;
-    line-height: 1.6;
-    color: #475569;
-    margin-bottom: 24px;
+    font-size: 1.3rem;
+    color: #4b5563;
+    max-width: 800px;
+    margin: 0 auto 32px;
+}
+
+.progressContainer {
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .progressStatus {
-    margin-bottom: 28px;
-    padding: 16px;
-    border-radius: 8px;
-    background-color: #f8fafc;
+    margin-bottom: 16px;
 }
 
-.completed {
-    color: #16a34a;
+.completedBadge,
+.inProgressBadge,
+.notRegisteredBadge {
+    font-size: 1.1rem;
     font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 999px;
+    display: inline-block;
 }
 
-.inProgress {
-    color: #2563eb;
+.completedBadge {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.inProgressBadge {
+    background-color: #dbeafe;
+    color: #4338ca;
+}
+
+.notRegisteredBadge {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.progressBarWrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.progressBar {
+    flex: 1;
+    height: 12px;
+    background-color: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(to right, #2563eb, #10b981);
+    border-radius: 999px;
+    transition: width 0.6s ease;
+}
+
+.progressText {
     font-weight: 600;
+    color: #1e293b;
+    min-width: 60px;
+    text-align: right;
 }
 
-.notRegistered {
-    color: #dc2626;
-    font-weight: 600;
+.mainLayout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 40px;
+    margin-top: 20px;
 }
 
-.moduleContent {
-    background-color: #f1f5f9;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 32px;
+.sidebar {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    height: fit-content;
+    position: sticky;
+    top: 100px;
 }
 
-.moduleContent h2 {
-    font-size: 22px;
-    margin-bottom: 12px;
-    color: #0f172a;
-}
-
-.moduleContent p {
-    font-size: 15px;
-    line-height: 1.6;
-    color: #334155;
-}
-
-.completeButton {
-    margin-top: 16px;
-    background-color: #22c55e;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.completeButton:hover {
-    background-color: #16a34a;
-    transform: translateY(-1px);
-}
-
-.completeButton:disabled {
-    background-color: #94a3b8;
-    cursor: not-allowed;
-}
-
-.structureHeader {
-    font-size: 20px;
+.sidebarTitle {
+    font-size: 1.4rem;
     font-weight: 700;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
     color: #1e293b;
 }
 
@@ -98,44 +120,149 @@
     margin: 0;
 }
 
-.moduleList li {
-    padding: 10px 14px;
-    margin-bottom: 8px;
-    background-color: #f8fafc;
-    border-radius: 6px;
-    font-size: 15px;
-    color: #334155;
+.moduleItem {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 16px;
+    margin-bottom: 12px;
+    background-color: #f8fafc;
+    border-radius: 12px;
+    transition: all 0.3s;
+}
+
+.moduleItem:hover {
+    background-color: #f1f5f9;
+    transform: translateX(4px);
 }
 
 .currentModule {
-    background-color: #dbeafe;
+    background-color: #dbeafe !important;
+    border-left: 4px solid #2563eb;
+}
+
+.pastModule {
+    opacity: 0.7;
+}
+
+.moduleInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.moduleNumber {
+    font-weight: 700;
+    color: #64748b;
+    min-width: 24px;
+}
+
+.moduleName {
+    font-weight: 500;
+    color: #334155;
+}
+
+.currentTag,
+.completedTag {
+    font-size: 0.85rem;
     font-weight: 600;
-    color: #1d4ed8;
-}
-
-.badgeComplete {
-    background-color: #22c55e;
-    color: white;
-    font-size: 12px;
-    padding: 4px 8px;
+    padding: 4px 10px;
     border-radius: 999px;
-    margin-left: 12px;
 }
 
-.loading {
-    text-align: center;
+.currentTag {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.completedTag {
+    background-color: #10b981;
+    color: white;
+}
+
+.mainContent {
+    background: white;
+    border-radius: 16px;
     padding: 40px;
-    font-size: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.moduleContent {
+    min-height: 500px;
+}
+
+.moduleHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.moduleHeader h2 {
+    font-size: 2rem;
+    margin: 0;
+    color: #1e293b;
+}
+
+.moduleLabel {
+    background-color: #e0e7ff;
+    color: #4338ca;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.contentText {
+    font-size: 1.1rem;
+    line-height: 1.8;
     color: #475569;
+    white-space: pre-wrap;
+    margin-bottom: 40px;
+}
+
+.completeButton {
+    padding: 16px 32px;
+    background-color: #10b981;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.completeButton:hover:not(:disabled) {
+    background-color: #059669;
+    transform: translateY(-2px);
+}
+
+.completeButton:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.noContent {
+    text-align: center;
+    padding: 80px 20px;
+    color: #6b7280;
+    font-size: 1.2rem;
+}
+
+.loading,
+.error {
+    text-align: center;
+    padding: 100px 20px;
+    font-size: 1.4rem;
+    font-weight: 600;
 }
 
 .error {
-    text-align: center;
-    padding: 40px;
-    font-size: 16px;
     color: #dc2626;
-    font-weight: 600;
 }

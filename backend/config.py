@@ -5,7 +5,7 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'your-fallback-secret-key')
     
     # Cấu hình SQLAlchemy (Kết nối Database)
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'postgresql://prevention_user:strong_password@db:5432/prevention_db')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'postgresql://prevention_user:strong_password@db:5433/prevention_db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # Cấu hình JWT

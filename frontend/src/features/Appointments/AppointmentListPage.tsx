@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { getMyAppointments, updateAppointmentStatus } from '../../services/appointmentService';
 import type { Appointment, AppointmentStatus } from '../../types/appointment';
-import { useAuth } from '../../context/AuthContext'; 
+import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -32,7 +32,7 @@ const AppointmentListPage: React.FC = () => {
         loadAppointments();
     }, []);
 
-    const handleStatusUpdate = async (appointmentId: number,newStatus: AppointmentStatus) => {
+    const handleStatusUpdate = async (appointmentId: number, newStatus: AppointmentStatus) => {
         if (!isCounselorOrAdmin || !window.confirm(`Bạn có chắc muốn chuyển trạng thái sang ${newStatus}?`)) {
             return;
         }
@@ -43,80 +43,93 @@ const AppointmentListPage: React.FC = () => {
             const updatedAppt = await updateAppointmentStatus(appointmentId, newStatus);
 
             setAppointments(prev =>
-            prev.map(a =>
-                a.appointment_id === appointmentId ? updatedAppt : a
-            )
+                prev.map(a =>
+                    a.appointment_id === appointmentId ? updatedAppt : a
+                )
             );
 
             toast.success('Cập nhật trạng thái thành công', { id: toastId });
         } catch (err) {
             toast.error('Cập nhật thất bại. Vui lòng kiểm tra quyền hạn!', {
-            id: toastId
+                id: toastId
             });
             console.error(err);
         }
-    };  
+    };
 
     return (
-        <div className={styles.container}>
-            <h1 className={styles.header}>Lịch hẹn {isCounselorOrAdmin ? 'Đã gán' : 'Của tôi'}</h1>
+        <div className={styles.pageContainer}>
+            <div className={styles.headerSection}>
+                <h1 className={styles.mainTitle}>
+                    Lịch hẹn {isCounselorOrAdmin ? 'Đã gán cho bạn' : 'Của tôi'}
+                </h1>
+                <p className={styles.subtitle}>
+                    {isCounselorOrAdmin
+                        ? `Bạn đang quản lý ${appointments.length} lịch hẹn`
+                        : `Bạn có ${appointments.length} lịch hẹn`}
+                </p>
 
-            {isRegularUser && (
-                <div className={styles.bookingAction}>
-                     <Link to="/appointments/book" className={styles.bookButton}>
+                {isRegularUser && (
+                    <Link to="/appointments/book" className={styles.bookButton}>
                         + Đặt lịch hẹn mới
                     </Link>
-                </div>
-            )}
+                )}
+            </div>
 
-            {isLoading && <div className={styles.loading}>Đang tải lịch hẹn...</div>} 
-            {error && <div className={styles.error}>{error}</div>}            
-            
+            {isLoading && <div className={styles.loading}>Đang tải danh sách lịch hẹn...</div>}
+            {error && <div className={styles.errorBox}>{error}</div>}
+
             {!isLoading && !error && (
                 <div className={styles.appointmentList}>
-                </div>
-            )}
-
-            <p className={styles.subHeader}>
-                {isCounselorOrAdmin ? `Bạn đang xem ${appointments.length} lịch hẹn.` : `Bạn có ${appointments.length} lịch hẹn.`}
-            </p>
-            
-            {error ? (
-                <div className={styles.error}>{error}</div> 
-            ) : (
-                <div className={styles.appointmentList}>
                     {appointments.length === 0 ? (
-                        <p className={styles.noData}>Hiện tại không có lịch hẹn nào.</p>
+                        <div className={styles.noDataCard}>
+                            <p>Hiện tại chưa có lịch hẹn nào.</p>
+                            {isRegularUser && <Link to="/appointments/book">Đặt lịch ngay</Link>}
+                        </div>
                     ) : (
                         appointments.map(appt => (
-                            <div key={appt.appointment_id} className={`${styles.appointmentCard} ${styles[appt.status]}`}>
-                                <div className={styles.info}>
-                                    <p><strong>ID:</strong> {appt.appointment_id}</p>
-                                    <p><strong>Thời gian:</strong> {new Date(appt.start_time).toLocaleString()} - {new Date(appt.end_time).toLocaleTimeString()}</p>
-                                    <p><strong>Lý do:</strong> {appt.reason}</p>
-                                    <p><strong>Chuyên viên:</strong> {appt.counselor_name || 'Đang chờ'}</p>
+                            <div
+                                key={appt.appointment_id}
+                                className={`${styles.appointmentCard} ${styles[`status_${appt.status}`]}`}
+                            >
+                                <div className={styles.cardHeader}>
+                                    <div className={styles.avatarPlaceholder}>
+                                        {appt.counselor_name?.charAt(0).toUpperCase() || 'C'}
+                                    </div>
+                                    <div className={styles.mainInfo}>
+                                        <h3 className={styles.appointmentId}>Lịch hẹn #{appt.appointment_id}</h3>
+                                        <p className={styles.counselor}>
+                                            Chuyên viên: <strong>{appt.counselor_name || 'Chưa chỉ định'}</strong>
+                                        </p>
+                                    </div>
+                                    <span className={styles.statusBadge}>
+                                        {appt.status === 'pending' ? 'Chờ xác nhận' :
+                                            appt.status === 'confirmed' ? 'Đã xác nhận' :
+                                                'Đã hủy'}
+                                    </span>
                                 </div>
-                                <div className={styles.statusGroup}>
-                                    <span className={styles.statusBadge}>{appt.status.toUpperCase()}</span>
 
-                                    {/* Cập nhật trạng thái */}
-                                    {isCounselorOrAdmin && appt.status === 'pending' && (
-                                        <div className={styles.actionButtons}>
-                                            <button 
-                                                className={styles.confirmButton}
-                                                onClick={() => handleStatusUpdate(appt.appointment_id, 'confirmed')}
-                                            >
-                                                Xác nhận
-                                            </button>
-                                            <button 
-                                                className={styles.cancelButton}
-                                                onClick={() => handleStatusUpdate(appt.appointment_id, 'canceled')}
-                                            >
-                                                Hủy
-                                            </button>
-                                        </div>
-                                    )}
+                                <div className={styles.details}>
+                                    <p><strong>Thời gian:</strong> {new Date(appt.start_time).toLocaleString('vi-VN')} → {new Date(appt.end_time).toLocaleTimeString('vi-VN')}</p>
+                                    <p><strong>Lý do tư vấn:</strong> {appt.reason}</p>
                                 </div>
+
+                                {isCounselorOrAdmin && appt.status === 'pending' && (
+                                    <div className={styles.actionButtons}>
+                                        <button
+                                            className={styles.confirmButton}
+                                            onClick={() => handleStatusUpdate(appt.appointment_id, 'confirmed')}
+                                        >
+                                            Xác nhận lịch
+                                        </button>
+                                        <button
+                                            className={styles.cancelButton}
+                                            onClick={() => handleStatusUpdate(appt.appointment_id, 'canceled')}
+                                        >
+                                            Hủy lịch
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         ))
                     )}

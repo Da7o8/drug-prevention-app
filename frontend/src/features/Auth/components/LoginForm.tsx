@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import api from '../../../services/api';
 
-import Input from '../../../components/ui/Input/Input'; 
-import styles from './LoginForm.module.css'; 
+import Input from '../../../components/ui/Input/Input';
+import styles from './LoginForm.module.css';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('admin@example.com'); // Giá trị mặc định để testing
   const [password, setPassword] = useState('Admin@123'); // Giá trị mặc định để testing
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -44,34 +44,46 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.loginForm}>
-      <Input
-        label="Email"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        disabled={isLoading}
-      />
-      <Input
-        label="Mật khẩu"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        disabled={isLoading}
-      />
+    <div className={styles.pageContainer}>
+      <div className={styles.loginCard}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Chào mừng trở lại</h1>
+          <p className={styles.subtitle}>Đăng nhập để tiếp tục hỗ trợ phòng ngừa ma túy</p>
+        </div>
 
-      {error && <div className={styles.errorBox}>{error}</div>}
+        <form onSubmit={handleSubmit} className={styles.loginForm}>
+          <Input
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            disabled={isLoading}
+            placeholder="nhập email của bạn"
+          />
 
-      <button type="submit" className={styles.submitButton} disabled={isLoading}>
-        {isLoading ? 'Đang xử lý...' : 'Đăng nhập'}
-      </button>
+          <Input
+            label="Mật khẩu"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            disabled={isLoading}
+            placeholder="nhập mật khẩu"
+          />
 
-      <p className={styles.footerText}>
-        Chưa có tài khoản? <a href="/register">Đăng ký ngay</a>
-      </p>
-    </form>
+          {error && <div className={styles.errorBox}>{error}</div>}
+
+          <button type="submit" className={styles.submitButton} disabled={isLoading}>
+            {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+          </button>
+
+          <p className={styles.footerText}>
+            Chưa có tài khoản? <a href="/register">Đăng ký ngay</a>
+          </p>
+        </form>
+      </div>
+    </div>
   );
 };
 

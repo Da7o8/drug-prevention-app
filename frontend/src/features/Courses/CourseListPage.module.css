@@ -1,7 +1,30 @@
 .container {
-    padding: 40px;
-    max-width: 1200px;
+    padding: 40px 20px;
+    max-width: 1400px;
     margin: 0 auto;
+    background: linear-gradient(to bottom, #f0f9ff, #ffffff);
+    min-height: 100vh;
+}
+
+.heroHeader {
+    text-align: center;
+    padding: 60px 20px 40px;
+    background: linear-gradient(rgba(37, 99, 235, 0.1), transparent);
+    border-radius: 16px;
+    margin-bottom: 40px;
+}
+
+.mainTitle {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1e40af;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 1.3rem;
+    color: #4b5563;
+    margin-top: 12px;
 }
 
 .headerGroup {
@@ -11,127 +34,209 @@
     margin-bottom: 30px;
 }
 
-.header {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #007bff;
+.sectionTitle {
+    font-size: 2rem;
+    color: #1f2937;
 }
 
 .createButton {
-    padding: 10px 20px;
-    background-color: #ffc107; 
-    color: #333;
+    padding: 12px 24px;
+    background-color: #fbbf24;
+    color: #1f2937;
+    font-weight: 600;
+    border-radius: 8px;
     text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s;
-}
-.createButton:hover {
-    background-color: #e0a800;
+    transition: all 0.3s;
+    box-shadow: 0 4px 6px rgba(251, 191, 36, 0.2);
 }
 
-/* Thanh tìm kiếm và bộ lọc */
+.createButton:hover {
+    background-color: #f59e0b;
+    transform: translateY(-2px);
+}
+
 .filterBar {
     display: flex;
+    flex-wrap: wrap;
     gap: 20px;
-    margin-bottom: 30px;
-    padding: 15px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    align-items: center;
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.searchWrapper {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
 }
 
 .searchInput {
-    flex-grow: 1;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    font-size: 1em;
+    width: 80%;
+    padding: 14px 14px 14px 44px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border 0.3s;
+}
+
+.searchInput:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.searchIcon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.4rem;
+    opacity: 0.6;
 }
 
 .filterSelect {
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    font-size: 1em;
-    min-width: 200px;
+    padding: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    min-width: 220px;
+    background-color: white;
 }
 
 .courseGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
 }
+
 .courseCard {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
 }
+
 .courseCard:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
-.courseTitle {
-    font-size: 1.5em;
-    margin-top: 0;
-    color: #333;
+
+.courseImagePlaceholder {
+    height: 180px;
+    background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
 }
-.courseDesc {
-    color: #555;
+
+.cardContent {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
 }
-.audienceTag {
-    display: inline-block;
-    background-color: #e9ecef;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.8em;
-    margin-bottom: 15px;
+
+.courseTitle {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 12px 0;
 }
 
-/* Nút đăng ký khóa học */
+.courseDesc {
+    color: #64748b;
+    line-height: 1.6;
+    flex-grow: 1;
+    margin-bottom: 16px;
+}
+
+.audienceTag {
+    align-self: flex-start;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.audience_student {
+    background-color: #dbeafe;
+    color: #4338ca;
+}
+
+.audience_parent {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+/* Màu cho 'counselor' (chuyên gia tư vấn) - xanh lá nhạt */
+.audience_professional {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+/* Màu cho 'all' (tất cả) - xám trung tính */
+.audience_all {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+
+.audience_ {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+
 .registerButton {
-    display: block;
-    text-align: center;
-    padding: 10px;
-    background-color: #007bff; /* Màu xanh dương */
+    padding: 12px;
+    background-color: #2563eb;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 1em;
-    margin-top: 15px;
-    margin-bottom: 10px; /* Để cách nút xem chi tiết */
+    margin-bottom: 12px;
     transition: background-color 0.3s;
 }
+
 .registerButton:hover {
-    background-color: #0056b3;
+    background-color: #1d4ed8;
 }
 
-/* Nút xem chi tiết khóa họ */
-.viewButton {
-    display: block;
-    text-align: center;
-    padding: 10px;
-    background-color: #28a745;
-    color: white;
-    border-radius: 4px;
-    text-decoration: none;
-    margin-top: auto;
-}
-
-/* Trạng thái Đã đăng ký */
 .registeredStatus {
-    display: block;
+    padding: 12px;
+    background-color: #fef3c7;
+    color: #92400e;
+    border-radius: 8px;
+    font-weight: 600;
     text-align: center;
-    padding: 10px;
-    background-color: #ffc107; 
-    color: #333;
-    border-radius: 4px;
-    font-weight: bold;
-    margin-top: 15px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+}
+
+.viewButton {
+    margin-top: auto;
+    padding: 12px;
+    background-color: #10b981;
+    color: white;
+    text-align: center;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.viewButton:hover {
+    background-color: #059669;
+}
+
+.emptyText {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #6b7280;
+    padding: 60px;
 }

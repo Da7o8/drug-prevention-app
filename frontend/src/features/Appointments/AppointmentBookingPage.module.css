@@ -1,92 +1,196 @@
-.container {
-    padding: 40px;
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.pageContainer {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e0f2fe 0%, #d1fae5 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.bookingCard {
+    width: 100%;
+    max-width: 720px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 48px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .header {
     text-align: center;
-    margin-bottom: 30px;
-    color: #007bff;
+    margin-bottom: 48px;
+}
+
+.title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #1e40af;
+    margin: 0 0 16px 0;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #4b5563;
+    margin: 0;
 }
 
 .form {
     display: flex;
     flex-direction: column;
+    gap: 32px;
 }
 
-.formGroup {
-    margin-bottom: 20px;
+.fieldGroup {
+    display: flex;
+    flex-direction: column;
 }
 
-.formGroup label {
-    display: block;
-    margin-bottom: 8px;
+.label {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+}
+
+.counselorGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.counselorCard {
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.counselorCard:hover {
+    border-color: #3b82f6;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.15);
+}
+
+.counselorCard.selected {
+    border-color: #3b82f6;
+    background: #eff6ff;
+    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+}
+
+.avatar {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #3b82f6, #10b981);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
     font-weight: bold;
-    color: #343a40;
 }
 
-.formGroup select,
-.formGroup input[type="datetime-local"],
-.formGroup textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    box-sizing: border-box; 
-    font-size: 16px;
+.counselorInfo h4 {
+    margin: 0 0 4px 0;
+    font-size: 1.2rem;
+    color: #1f2937;
 }
 
-.formGroup textarea {
-    resize: vertical;
+.specialization {
+    margin: 0;
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+.checkmark {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #10b981;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.datetimeInput,
+.textarea {
+    padding: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s;
+    background-color: #f9fafb;
+}
+
+.datetimeInput:focus,
+.textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+    outline: none;
 }
 
 .hint {
-    font-size: 0.8em;
-    color: #6c757d;
-    margin-top: 5px;
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.errorBox {
+    padding: 16px;
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.successBox {
+    padding: 16px;
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 600;
 }
 
 .submitButton {
-    padding: 12px 20px;
-    background-color: #007bff;
+    padding: 18px;
+    background: linear-gradient(135deg, #10b981, #059669);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s;
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    margin-top: 16px;
 }
 
 .submitButton:hover:not(:disabled) {
-    background-color: #0056b3;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(16, 185, 129, 0.4);
 }
 
 .submitButton:disabled {
-    background-color: #a0c3e8;
+    background: #94a3b8;
     cursor: not-allowed;
-}
-
-.error {
-    color: #dc3545;
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #dc3545;
-    background-color: #f8d7da;
-    border-radius: 4px;
-    text-align: center;
-}
-
-.success {
-    color: #28a745;
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #28a745;
-    background-color: #d4edda;
-    border-radius: 4px;
-    text-align: center;
+    transform: none;
+    box-shadow: none;
 }

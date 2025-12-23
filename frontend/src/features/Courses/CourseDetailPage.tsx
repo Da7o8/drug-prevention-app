@@ -52,66 +52,104 @@ const CourseDetailPage = () => {
     };
 
     if (loading) {
-        return <div className={styles.loading}>Đang tải dữ liệu...</div>;
+        return <div className={styles.loading}>Đang tải dữ liệu khóa học...</div>;
     }
 
     if (error || !course) {
-        return <div className={styles.error}>{error || "Dữ liệu không hợp lệ"}</div>;
+        return <div className={styles.error}>{error || "Không thể tải khóa học"}</div>;
     }
+
+    // Tính tiến độ % (nếu có currentModule)
+    const progressPercent = modules.length > 0
+        ? Math.round(((modules.findIndex(m => m.id === currentModule?.id) + 1) / modules.length) * 100)
+        : 0;
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.courseTitle}>{course.title}</h1>
-            <p className={styles.courseDesc}>{course.description}</p>
+            {/* Hero header với tiêu đề + mô tả */}
+            <div className={styles.heroHeader}>
+                <h1 className={styles.courseTitle}>{course.title}</h1>
+                <p className={styles.courseDesc}>{course.description}</p>
 
-            <div className={styles.progressStatus}>
-                {isCompleted ? (
-                    <span className={styles.completed}>Đã hoàn thành khóa học</span>
-                ) : currentModule ? (
-                    <span className={styles.inProgress}>Đang học</span>
-                ) : (
-                    <>
-                        {user?.role === "user" && (
-                            <span className={styles.notRegistered}>
-                                Chưa đăng ký khóa học
-                            </span>
-                        )}
-                    </>
-                )}  
-        </div>
-                    
-            {currentModule && (
-                <div className={styles.moduleContent}>
-                    <h2>{currentModule.title}</h2>
-                    <p>{currentModule.content}</p>
+                {/* Progress Status + Bar */}
+                <div className={styles.progressContainer}>
+                    <div className={styles.progressStatus}>
+                        {isCompleted ? (
+                            <span className={styles.completedBadge}>✅ Đã hoàn thành khóa học</span>
+                        ) : currentModule ? (
+                            <span className={styles.inProgressBadge}>📚 Đang học</span>
+                        ) : user?.role === "user" ? (
+                            <span className={styles.notRegisteredBadge}>⚠️ Chưa đăng ký khóa học</span>
+                        ) : null}
+                    </div>
 
-                    <button
-                        className={styles.completeButton}
-                        onClick={handleCompleteModule}
-                        disabled={isCompleted}
-                    >
-                        Hoàn thành module
-                    </button>
+                    {currentModule && !isCompleted && (
+                        <div className={styles.progressBarWrapper}>
+                            <div className={styles.progressBar}>
+                                <div
+                                    className={styles.progressFill}
+                                    style={{ width: `${progressPercent}%` }}
+                                />
+                            </div>
+                            <span className={styles.progressText}>{progressPercent}% hoàn thành</span>
+                        </div>
+                    )}
                 </div>
-            )}
+            </div>
 
-            <h3 className={styles.structureHeader}>Nội dung khóa học</h3>
-            <ul className={styles.moduleList}>
-                {modules.map((module) => (
-                    <li
-                        key={module.id}
-                        className={
-                            module.id === currentModule?.id
-                                ? styles.currentModule
-                                : ""
-                        }
-                    >
-                        <span>{module.title}</span>
+            <div className={styles.mainLayout}>
+                {/* Sidebar: Danh sách module */}
+                <aside className={styles.sidebar}>
+                    <h3 className={styles.sidebarTitle}>Nội dung khóa học ({modules.length} module)</h3>
+                    <ul className={styles.moduleList}>
+                        {modules.map((module, index) => {
+                            const isCurrent = module.id === currentModule?.id;
+                            const isPast = currentModule && index < modules.findIndex(m => m.id === currentModule.id);
+                            return (
+                                <li
+                                    key={module.id}
+                                    className={`${styles.moduleItem} ${isCurrent ? styles.currentModule : ''} ${isPast ? styles.pastModule : ''}`}
+                                >
+                                    <div className={styles.moduleInfo}>
+                                        <span className={styles.moduleNumber}>{index + 1}</span>
+                                        <span className={styles.moduleName}>{module.title}</span>
+                                    </div>
+                                    {isCurrent && <span className={styles.currentTag}>Đang học</span>}
+                                    {isPast && <span className={styles.completedTag}>✓</span>}
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </aside>
 
-                        {module.id === currentModule?.id && (<span className={styles.inProgress}>Đang thực hiện</span>)}
-                    </li>
-                ))}
-            </ul>
+                {/* Main Content */}
+                <main className={styles.mainContent}>
+                    {currentModule ? (
+                        <div className={styles.moduleContent}>
+                            <div className={styles.moduleHeader}>
+                                <h2>{currentModule.title}</h2>
+                                <span className={styles.moduleLabel}>Module hiện tại</span>
+                            </div>
+                            <div className={styles.contentText}>
+                                {currentModule.content || "Nội dung module sẽ được hiển thị tại đây."}
+                            </div>
+
+                            <button
+                                className={styles.completeButton}
+                                onClick={handleCompleteModule}
+                                disabled={isCompleted}
+                            >
+                                {isCompleted ? 'Đã hoàn thành' : 'Hoàn thành module này →'}
+                            </button>
+                        </div>
+                    ) : (
+                        <div className={styles.noContent}>
+                            <p>Bạn chưa bắt đầu khóa học này.</p>
+                            <p>Hãy quay lại sau khi đăng ký và bắt đầu module đầu tiên.</p>
+                        </div>
+                    )}
+                </main>
+            </div>
         </div>
     );
 };

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../../services/api';
 
 import Input from '../../../components/ui/Input/Input';
-import styles from './LoginForm.module.css'; 
+import styles from './LoginForm.module.css';
 
 const RegisterForm: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -12,7 +12,7 @@ const RegisterForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,43 +46,57 @@ const RegisterForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.registerForm}>
-      <Input
-        label="Họ và Tên"
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-        disabled={isLoading}
-      />
-      <Input
-        label="Email"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        disabled={isLoading}
-      />
-      <Input
-        label="Mật khẩu"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        disabled={isLoading}
-      />
+    <div className={styles.pageContainer}>
+      <div className={styles.registerCard}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Đăng ký tài khoản</h1>
+          <p className={styles.subtitle}>Tham gia cộng đồng phòng ngừa ma túy ngay hôm nay</p>
+        </div>
 
-      {error && <div className={styles.errorBox}>{error}</div>}
-      {success && <div className={styles.successBox}>{success}</div>} {/* Thêm hộp thông báo thành công */}
+        <form onSubmit={handleSubmit} className={styles.registerForm}>
+          <Input
+            label="Họ và Tên *"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            disabled={isLoading}
+            placeholder="Nhập họ và tên đầy đủ"
+          />
 
-      <button type="submit" className={styles.submitButton} disabled={isLoading}>
-        {isLoading ? 'Đang xử lý...' : 'Đăng ký'}
-      </button>
+          <Input
+            label="Email *"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            disabled={isLoading}
+            placeholder="nhập email của bạn"
+          />
 
-      <p className={styles.footerText}>
-        Đã có tài khoản? <a href="/login">Đăng nhập</a>
-      </p>
-    </form>
+          <Input
+            label="Mật khẩu *"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            disabled={isLoading}
+            placeholder="Tạo mật khẩu mạnh"
+          />
+
+          {error && <div className={styles.errorBox}>{error}</div>}
+          {success && <div className={styles.successBox}>{success}</div>}
+
+          <button type="submit" className={styles.submitButton} disabled={isLoading}>
+            {isLoading ? 'Đang đăng ký...' : 'Đăng ký ngay'}
+          </button>
+
+          <p className={styles.footerText}>
+            Đã có tài khoản? <a href="/login">Đăng nhập</a>
+          </p>
+        </form>
+      </div>
+    </div>
   );
 };
 

@@ -1,0 +1,13 @@
+.layoutWrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Đảm bảo footer luôn ở dưới cùng */
+}
+
+.mainContent {
+    flex: 1;
+    /* Chiếm hết không gian còn lại giữa header và footer */
+    background: linear-gradient(to bottom, #f0f9ff, #ffffff);
+    /* Có thể thêm padding nếu muốn nội dung không sát mép */
+}

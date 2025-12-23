@@ -43,7 +43,15 @@ def seed_command():
             print("--- Seeding thất bại ---")
         
         db.session.remove()
-
+# new command to initialize the database
+@app.cli.command("init-db")
+def init_db():
+    """Tạo toàn bộ table và seed dữ liệu mẫu"""
+    with app.app_context():
+        db.create_all()
+        print("Đã tạo toàn bộ table")
+        from seed import seed_all
+        seed_all()
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=True, extra_files=None)

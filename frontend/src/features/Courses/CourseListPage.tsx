@@ -12,6 +12,7 @@ const AUDIENCE_OPTIONS = [
     { label: 'Tất cả', value: '' },
     { label: 'Học sinh/Sinh viên', value: 'student' },
     { label: 'Phụ huynh', value: 'parent' },
+    { label: 'Chuyên gia', value: 'professional' },
 ];
 
 const CourseListPage: React.FC = () => {
@@ -20,11 +21,11 @@ const CourseListPage: React.FC = () => {
     const [userProgress, setUserProgress] = useState<CourseProgress[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [searchTerm, setSearchTerm] = useState(''); 
-    const [filterAudience, setFilterAudience] = useState(''); 
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterAudience, setFilterAudience] = useState('');
 
     useEffect(() => {
-        const loadCoursesAndProgress = async () => { 
+        const loadCoursesAndProgress = async () => {
             try {
                 const courseData = await getAllCourses(searchTerm, filterAudience);
                 setCourses(courseData);
@@ -45,8 +46,8 @@ const CourseListPage: React.FC = () => {
     }, [user, searchTerm, filterAudience]);
 
     const isRegistered = (courseId: number): boolean => {
-            return userProgress.some(p => p.course_id === courseId);
-        };
+        return userProgress.some(p => p.course_id === courseId);
+    };
 
     const handleRegister = async (courseId: number, courseTitle: string) => {
         if (!window.confirm(`Bạn có chắc chắn muốn đăng ký khóa học: ${courseTitle}?`)) {
@@ -54,7 +55,7 @@ const CourseListPage: React.FC = () => {
         }
         try {
             await registerCourse(courseId);
-            toast.success(`Đăng ký khóa học "${courseTitle}" thành công!`);          
+            toast.success(`Đăng ký khóa học "${courseTitle}" thành công!`);
             // loadCourses(); 
         } catch (err: any) {
             const errMsg = err.response?.data?.message || 'Lỗi đăng ký không xác định.';
@@ -72,10 +73,14 @@ const CourseListPage: React.FC = () => {
 
     return (
         <div className={styles.container}>
-            <div className={styles.headerGroup}>
-                <h1 className={styles.header}>Danh sách Khóa học</h1>
+            {/* Header hấp dẫn hơn */}
+            <div className={styles.heroHeader}>
+                <h1 className={styles.mainTitle}>Khóa học Phòng ngừa Ma túy</h1>
+                <p className={styles.subtitle}>Nâng cao nhận thức – Bảo vệ tương lai</p>
+            </div>
 
-                {/* Create button for Admin */}
+            <div className={styles.headerGroup}>
+                <h2 className={styles.sectionTitle}>Danh sách Khóa học</h2>
                 {user?.role === 'admin' && (
                     <Link to="/courses/new" className={styles.createButton}>
                         + Tạo Khóa học Mới
@@ -83,17 +88,19 @@ const CourseListPage: React.FC = () => {
                 )}
             </div>
 
+            {/* Filter bar hiện đại hơn */}
             <div className={styles.filterBar}>
-                {/* Thanh Tìm kiếm */}
-                <input
-                    type="text"
-                    placeholder="Tìm kiếm theo tên khóa học hoặc mô tả..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className={styles.searchInput}
-                />
+                <div className={styles.searchWrapper}>
+                    <input
+                        type="text"
+                        placeholder="Tìm kiếm tên hoặc mô tả khóa học..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className={styles.searchInput}
+                    />
+                    <span className={styles.searchIcon}>🔍</span>
+                </div>
 
-                {/* Bộ lọc Đối tượng */}
                 <select
                     value={filterAudience}
                     onChange={(e) => setFilterAudience(e.target.value)}
@@ -107,37 +114,54 @@ const CourseListPage: React.FC = () => {
                 </select>
             </div>
 
+            {/* Course Grid */}
             <div className={styles.courseGrid}>
-                {courses.map(course => (
-                    <div key={course.id} className={styles.courseCard}>
-                        <h2 className={styles.courseTitle}>{course.title}</h2>
-                        <p className={styles.courseDesc}>{course.description}</p>
-                        <span className={styles.audienceTag}>{course.target_audience.toUpperCase()}</span>
+                {courses.length === 0 ? (
+                    <p className={styles.emptyText}>Chưa có khóa học nào phù hợp với bộ lọc.</p>
+                ) : (
+                    courses.map(course => (
+                        <div key={course.id} className={styles.courseCard}>
+                            {/* Placeholder hình ảnh (có thể thay bằng course.image nếu có) */}
+                            <div className={styles.courseImagePlaceholder}>
+                                <span className={styles.imageIcon}>📚</span>
+                            </div>
 
-                        {user && user.role === 'user' && (
-                            <>
-                                {isRegistered(course.id) ? (
-                                    <div className={styles.registeredStatus}>
-                                        Đã Đăng ký (Tiến trình: {userProgress.find(p => p.course_id === course.id)?.is_completed ? 'Hoàn thành' : 'Đang học'})
-                                    </div>
-                                ) : (
-                                    <button 
-                                        className={styles.registerButton}
-                                        onClick={() => handleRegister(course.id, course.title)}
-                                    >
-                                        Đăng ký Khóa học
-                                    </button>
+                            <div className={styles.cardContent}>
+                                <h3 className={styles.courseTitle}>{course.title}</h3>
+                                <p className={styles.courseDesc}>{course.description}</p>
+
+                                {/* Tag audience với màu khác nhau */}
+                                <span className={`${styles.audienceTag} ${styles[`audience_${course.target_audience}`]}`}>
+                                    {course.target_audience.toUpperCase()}
+                                </span>
+
+                                {user && user.role === 'user' && (
+                                    <>
+                                        {isRegistered(course.id) ? (
+                                            <div className={styles.registeredStatus}>
+                                                ✅ Đã đăng ký • Tiến độ: {
+                                                    userProgress.find(p => p.course_id === course.id)?.is_completed
+                                                        ? 'Hoàn thành' : 'Đang học'
+                                                }
+                                            </div>
+                                        ) : (
+                                            <button
+                                                className={styles.registerButton}
+                                                onClick={() => handleRegister(course.id, course.title)}
+                                            >
+                                                Đăng ký ngay
+                                            </button>
+                                        )}
+                                    </>
                                 )}
-                            </>
-                        )}
 
-                        {/* Xem chi tiết */}
-                        <Link to={`/courses/${course.id}`} className={styles.viewButton}>
-                            Xem chi tiết
-                        </Link>
-                    </div>
-                ))}
-                {courses.length === 0 && <p>Chưa có khóa học nào được tạo.</p>}
+                                <Link to={`/courses/${course.id}`} className={styles.viewButton}>
+                                    Xem chi tiết →
+                                </Link>
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
         </div>
     );

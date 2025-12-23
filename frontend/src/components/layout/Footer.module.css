@@ -1,0 +1,46 @@
+.footer {
+    background-color: #1e293b;
+    color: #cbd5e1;
+    padding: 60px 20px 40px;
+    margin-top: auto;
+    /* Đẩy footer xuống dưới cùng khi nội dung ngắn */
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+    text-align: left;
+}
+
+.left h3 {
+    color: white;
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+}
+
+.left p,
+.center p,
+.right p {
+    margin: 8px 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.center strong {
+    color: white;
+}
+
+.right {
+    text-align: right;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .right {
+        text-align: left;
+    }
+}

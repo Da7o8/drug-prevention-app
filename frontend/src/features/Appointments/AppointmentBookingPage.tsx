@@ -43,9 +43,9 @@ const AppointmentBookingPage: React.FC = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ 
-            ...prev, 
-            [name]: name === 'counselor_id' ? parseInt(value) : value 
+        setFormData(prev => ({
+            ...prev,
+            [name]: name === 'counselor_id' ? parseInt(value) : value
         }));
     };
 
@@ -85,63 +85,84 @@ const AppointmentBookingPage: React.FC = () => {
     };
 
     return (
-        <div className={styles.container}>
-            <h1 className={styles.header}>Đặt lịch hẹn Chuyên viên</h1>
-            
-            <form onSubmit={handleSubmit} className={styles.form}>
-                
-                {/* 1. Chọn Chuyên viên */}
-                <div className={styles.formGroup}>
-                    <label htmlFor="counselor_id">Chọn Chuyên viên:</label>
-                    <select
-                        id="counselor_id"
-                        name="counselor_id"
-                        value={formData.counselor_id}
-                        onChange={handleChange}
-                        required
-                    >
-                        {counselors.map(c => (
-                            <option key={c.counselor_id} value={c.counselor_id}>
-                                {c.name} - {c.specialization}
-                            </option>
-                        ))}
-                    </select>
+        <div className={styles.pageContainer}>
+            <div className={styles.bookingCard}>
+                <div className={styles.header}>
+                    <h1 className={styles.title}>Đặt lịch tư vấn chuyên gia</h1>
+                    <p className={styles.subtitle}>Chọn chuyên viên và thời gian phù hợp để được hỗ trợ sớm nhất</p>
                 </div>
 
-                {/* 2. Chọn Thời gian */}
-                <div className={styles.formGroup}>
-                    <label htmlFor="start_time">Thời gian bắt đầu (Ngày và Giờ):</label>
-                    <input
-                        type="datetime-local"
-                        id="start_time"
-                        name="start_time"
-                        value={formData.start_time}
-                        onChange={handleChange}
-                        required
-                    />
-                    <p className={styles.hint}>Lịch hẹn thường kéo dài 1 giờ và phải được đặt trong tương lai.</p>
-                </div>
+                <form onSubmit={handleSubmit} className={styles.form}>
+                    {/* Chọn chuyên viên với avatar */}
+                    <div className={styles.fieldGroup}>
+                        <label className={styles.label}>Chọn chuyên viên tư vấn</label>
+                        <div className={styles.counselorGrid}>
+                            {counselors.map(c => (
+                                <div
+                                    key={c.counselor_id}
+                                    className={`${styles.counselorCard} ${formData.counselor_id === c.counselor_id ? styles.selected : ''}`}
+                                    onClick={() => setFormData(prev => ({ ...prev, counselor_id: c.counselor_id }))}
+                                >
+                                    <div className={styles.avatar}>
+                                        {c.name.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div className={styles.counselorInfo}>
+                                        <h4 className={styles.counselorName}>{c.name}</h4>
+                                        <p className={styles.specialization}>{c.specialization}</p>
+                                    </div>
+                                    {formData.counselor_id === c.counselor_id && (
+                                        <span className={styles.checkmark}>✓</span>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
 
-                {/* 3. Nội dung */}
-                <div className={styles.formGroup}>
-                    <label htmlFor="reason">Nội dung/Vấn đề cần tư vấn:</label>
-                    <textarea
-                        id="reason"
-                        name="reason"
-                        rows={4}
-                        value={formData.reason}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
+                    {/* Thời gian */}
+                    <div className={styles.fieldGroup}>
+                        <label htmlFor="start_time" className={styles.label}>
+                            Thời gian mong muốn *
+                        </label>
+                        <input
+                            type="datetime-local"
+                            id="start_time"
+                            name="start_time"
+                            value={formData.start_time}
+                            onChange={handleChange}
+                            required
+                            min={new Date().toISOString().slice(0, 16)} // Không cho chọn quá khứ
+                            className={styles.datetimeInput}
+                        />
+                        <p className={styles.hint}>
+                            Lịch hẹn kéo dài 60 phút • Chỉ đặt được từ giờ hiện tại trở đi
+                        </p>
+                    </div>
 
-                {error && <p className={styles.error}>{error}</p>}
-                {success && <p className={styles.success}>{success}</p>}
+                    {/* Lý do */}
+                    <div className={styles.fieldGroup}>
+                        <label htmlFor="reason" className={styles.label}>
+                            Nội dung cần tư vấn *
+                        </label>
+                        <textarea
+                            id="reason"
+                            name="reason"
+                            rows={5}
+                            value={formData.reason}
+                            onChange={handleChange}
+                            required
+                            placeholder="Mô tả ngắn gọn vấn đề bạn đang gặp phải (ví dụ: lo âu, áp lực học tập, gia đình...)"
+                            className={styles.textarea}
+                        />
+                    </div>
 
-                <button type="submit" className={styles.submitButton} disabled={isLoading}>
-                    {isLoading ? 'Đang đặt lịch...' : 'Đặt lịch hẹn'}
-                </button>
-            </form>
+                    {error && <div className={styles.errorBox}>{error}</div>}
+                    {success && <div className={styles.successBox}>{success}</div>}
+
+                    <button type="submit" className={styles.submitButton} disabled={isLoading}>
+                        {isLoading ? 'Đang gửi yêu cầu...' : 'Xác nhận đặt lịch'}
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };
