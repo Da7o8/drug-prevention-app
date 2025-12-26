@@ -43,9 +43,9 @@ const AppointmentBookingPage: React.FC = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ 
-            ...prev, 
-            [name]: name === 'counselor_id' ? parseInt(value) : value 
+        setFormData(prev => ({
+            ...prev,
+            [name]: name === 'counselor_id' ? parseInt(value) : value
         }));
     };
 
@@ -62,34 +62,37 @@ const AppointmentBookingPage: React.FC = () => {
         }
 
         try {
-            // Định dạng thời gian cho Backend (ISO 8601 string: 2025-12-09T14:30)
-            const startTimeISO = formData.start_time + ':00Z'; // Thêm giây và Z cho UTC
+            const startTimeISO = new Date(formData.start_time).toISOString();
+
             const newAppointment = await createAppointment({
                 counselor_id: formData.counselor_id as number,
                 start_time: startTimeISO,
                 reason: formData.reason,
             });
 
-            setSuccess(`Đặt lịch hẹn thành công! ID: ${newAppointment.appointment_id}. Lịch đang chờ Xác nhận.`);
+            setSuccess(
+                `Đặt lịch hẹn thành công! ID: ${newAppointment.appointment_id}. Lịch đang chờ xác nhận.`
+            );
 
-            setTimeout(() => {
-                navigate('/appointments');
-            }, 3000);
-
+            setTimeout(() => navigate('/appointments'), 2000);
         } catch (err: any) {
-            const message = err.response?.data?.error || 'Lỗi khi đặt lịch hẹn. Vui lòng kiểm tra lại thời gian (chỉ có thể đặt trước) và thử lại.';
+            const message =
+                err.response?.data?.message ||
+                err.response?.data?.error ||
+                'Lỗi khi đặt lịch. Vui lòng kiểm tra thời gian.';
             setError(message);
         } finally {
             setIsLoading(false);
         }
     };
 
+
     return (
         <div className={styles.container}>
             <h1 className={styles.header}>Đặt lịch hẹn Chuyên viên</h1>
-            
+
             <form onSubmit={handleSubmit} className={styles.form}>
-                
+
                 {/* 1. Chọn Chuyên viên */}
                 <div className={styles.formGroup}>
                     <label htmlFor="counselor_id">Chọn Chuyên viên:</label>

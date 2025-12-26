@@ -1,22 +1,100 @@
-.authContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f0f4f8; 
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap');
+
+.page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  font-family: "Be Vietnam Pro", system-ui, sans-serif;
+  background: #f6f8fb;
+}
+
+/* ================= LEFT – VISUAL ================= */
+.visual {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(11,27,56,0.85), rgba(11,42,91,0.88)),
+    url("https://images.unsplash.com/photo-1520975916090-3105956dac38");
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+
+.visualOverlay {
+  height: 100%;
+  padding: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.visualOverlay h1 {
+  font-size: 42px;
+  font-weight: 900;
+  margin-bottom: 16px;
+  letter-spacing: -0.3px;
+}
+
+.visualOverlay p {
+  font-size: 17px;
+  line-height: 1.8;
+  max-width: 460px;
+  color: rgba(255,255,255,0.92);
+}
+
+.securityNote {
+  margin-top: 32px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.14);
+  font-size: 14px;
+  max-width: 420px;
+}
+
+/* ================= RIGHT – FORM ================= */
+.formWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .authBox {
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    background-color: white;
-    width: 100%;
-    max-width: 400px;
+  width: 420px;
+  background: white;
+  border-radius: 24px;
+  padding: 48px 40px;
+  box-shadow:
+    0 8px 20px rgba(15,23,42,0.05),
+    0 24px 60px rgba(15,23,42,0.06);
 }
 
 .title {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #333;
+  font-size: 26px;
+  font-weight: 900;
+  margin-bottom: 6px;
+  color: #0f172a;
+}
+
+.subTitle {
+  font-size: 15px;
+  color: rgba(15,23,42,0.65);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+/* ===== SWITCH ===== */
+.switch {
+  margin-top: 22px;
+  text-align: center;
+  font-size: 14px;
+  color: rgba(15,23,42,0.7);
+}
+
+.switch a {
+  font-weight: 700;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.switch a:hover {
+  text-decoration: underline;
 }

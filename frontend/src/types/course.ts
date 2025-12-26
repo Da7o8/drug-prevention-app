@@ -5,12 +5,14 @@ export interface CourseModule {
     // progress_status: 'completed' | 'pending'; 
 }
 
+export type CourseAudience = 'student' | 'parent' | 'all';
+
 export interface Course {
     id: number;
     title: string;
     description: string;
-    target_audience: 'user' | 'counselor' | 'all';
-    modules?: CourseModule[]; 
+    target_audience: CourseAudience;
+    modules?: CourseModule[];   
 }
 
 export interface CourseProgress {
